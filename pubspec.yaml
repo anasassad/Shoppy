@@ -36,6 +36,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  # SQLight plugin
+  sqflite: ^2.4.1
+
+  # The path package provides common operations for manipulating paths: joining, splitting, normalizing, etc.
+  path: ^1.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
