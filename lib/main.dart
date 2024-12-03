@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/dbhelper.dart';
-import 'package:shoppy/models/list_items.dart';
 import 'package:shoppy/models/shopping_list.dart';
+import 'package:shoppy/ui/items_screen.dart';
 
 void main() {
   runApp(const Shoppy());
@@ -46,6 +46,12 @@ class _ShopListState extends State<ShopList> {
       itemCount: shoppingList.length,
       itemBuilder: (context, position) {
         return ListTile(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ItemsScreen(shoppingList[position])));
+          },
           trailing: const IconButton(onPressed: null, icon: Icon(Icons.edit)),
           leading: CircleAvatar(
             child: Text(shoppingList[position].priority.toString()),

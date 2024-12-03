@@ -9,6 +9,16 @@ class Dbhelper {
   final int version = 1;
   Database? db;
 
+  // Create a private constructor named _internal
+  static final Dbhelper _dbhelper = Dbhelper._internal();
+
+  Dbhelper._internal();
+
+  // Return _dbhelper to the outside caller
+  factory Dbhelper() {
+    return _dbhelper;
+  }
+
   final String LISTS_SCHEMA = '''
         CREATE TABLE lists (
           id INTEGER PRIMARY KEY,
@@ -73,6 +83,17 @@ class Dbhelper {
         maps.length,
         (index) => ShoppingList(
             maps[index]['id'], maps[index]['name'], maps[index]['priority']));
+  }
+
+  Future<List<ListItems>> getItems(int idList) async {
+    List maps =
+        await db!.query('items', where: 'idList = ?', whereArgs: [idList]);
+
+    // Convert List<dynamic> to ShoppingList values to match the returned data of the Future
+    return List.generate(
+        maps.length,
+        (index) => ListItems(maps[index]['id'], maps[index]['idList'],
+            maps[index]['name'], maps[index]['note'], maps[index]['quantity']));
   }
 
   // For testing purposes we inserted 2 lines in both lists and items tables
