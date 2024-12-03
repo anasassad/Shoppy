@@ -65,6 +65,16 @@ class Dbhelper {
     return id;
   }
 
+  Future<List<ShoppingList>> getLists() async {
+    List maps = await db!.query('lists');
+
+    // Convert List<dynamic> to ShoppingList values to match the returned data of the Future
+    return List.generate(
+        maps.length,
+        (index) => ShoppingList(
+            maps[index]['id'], maps[index]['name'], maps[index]['priority']));
+  }
+
   // For testing purposes we inserted 2 lines in both lists and items tables
   Future<void> testDb() async {
     db = await openDb();

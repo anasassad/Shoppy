@@ -15,7 +15,11 @@ class Shoppy extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(
-        title: const Text('Shoppy'),
+        backgroundColor: Colors.black87,
+        title: const Text(
+          'Shoppy',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: const ShopList(),
     ));
@@ -30,25 +34,35 @@ class ShopList extends StatefulWidget {
 }
 
 class _ShopListState extends State<ShopList> {
+  List<ShoppingList> shoppingList = List.empty();
   Dbhelper helper = Dbhelper();
 
   @override
   Widget build(BuildContext context) {
     showData();
 
-    return Container();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: shoppingList.length,
+      itemBuilder: (context, position) {
+        return ListTile(
+          trailing: const IconButton(onPressed: null, icon: Icon(Icons.edit)),
+          leading: CircleAvatar(
+            child: Text(shoppingList[position].priority.toString()),
+          ),
+          title: Text(shoppingList[position].name),
+        );
+      },
+    );
   }
 
   Future showData() async {
     await helper.openDb();
 
-    ShoppingList list = ShoppingList(0, 'Kitchen', 3);
-    int listId = await helper.insertList(list);
+    shoppingList = await helper.getLists();
 
-    ListItems item = ListItems(0, listId, 'Chicken', 'Cooking item', '35 kg');
-    int itemId = await helper.insertItem(item);
-
-    print('List Id: ' + listId.toString());
-    print('Item Id: ' + itemId.toString());
+    setState(() {
+      shoppingList = shoppingList;
+    });
   }
 }
