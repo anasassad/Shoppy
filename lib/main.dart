@@ -34,12 +34,12 @@ class _ShopListState extends State<ShopList> {
   void initState() {
     dialog = ShoppingListDialog();
     super.initState();
+
+    showData();
   }
 
   @override
   Widget build(BuildContext context) {
-    showData();
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black87,
@@ -52,9 +52,10 @@ class _ShopListState extends State<ShopList> {
             backgroundColor: Colors.greenAccent,
             onPressed: () {
               showDialog(
-                  context: context,
-                  builder: (BuildContext context) => dialog.buildDialog(
-                      context, ShoppingList(0, '', 0), true));
+                      context: context,
+                      builder: (BuildContext context) => dialog.buildDialog(
+                          context, ShoppingList(0, '', 0), true))
+                  .then((_) => showData());
             },
             child: const Icon(
               Icons.add,
@@ -77,6 +78,8 @@ class _ShopListState extends State<ShopList> {
                       SnackBar(content: Text('$listName deleted')));
                 },
                 child: ListTile(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -87,10 +90,11 @@ class _ShopListState extends State<ShopList> {
                   trailing: IconButton(
                       onPressed: () {
                         showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                dialog.buildDialog(
-                                    context, shoppingList[position], false));
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    dialog.buildDialog(
+                                        context, shoppingList[position], false))
+                            .then((_) => showData());
                       },
                       icon: const Icon(Icons.edit)),
                   leading: CircleAvatar(
