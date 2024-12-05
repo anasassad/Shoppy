@@ -4,7 +4,7 @@ import 'package:shoppy/models/shopping_list.dart';
 
 class ShoppingListDialog {
   final txtName = TextEditingController();
-  final txtPriority = TextEditingController();
+  int? txtPriority = 1;
 
   Widget buildDialog(
       BuildContext context, ShoppingList shoppingList, bool isNew) {
@@ -12,7 +12,10 @@ class ShoppingListDialog {
 
     if (!isNew) {
       txtName.text = shoppingList.name;
-      txtPriority.text = shoppingList.priority.toString();
+      txtPriority = shoppingList.priority;
+    } else {
+      txtName.text = '';
+      txtPriority = null;
     }
 
     return AlertDialog(
@@ -25,16 +28,23 @@ class ShoppingListDialog {
               controller: txtName,
               decoration: const InputDecoration(hintText: 'Name'),
             ),
-            TextField(
-              controller: txtPriority,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: 'Priority (1 - 3)'),
+            DropdownButtonFormField(
+              value: txtPriority,
+              decoration: const InputDecoration(hintText: 'Priority'),
+              items: List.generate(
+                  3,
+                  (index) => DropdownMenuItem(
+                        value: index + 1,
+                        child: Text('${index + 1}'),
+                      )),
+              onChanged: (value) {
+                txtPriority = value!;
+              },
             ),
             TextButton(
                 onPressed: () {
                   shoppingList.name = txtName.text;
-                  shoppingList.priority = int.parse(txtPriority.text);
-                  print(shoppingList.toMap());
+                  shoppingList.priority = txtPriority!;
                   helper.insertList(shoppingList);
                   Navigator.pop(context);
                 },
