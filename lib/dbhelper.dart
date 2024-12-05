@@ -84,6 +84,13 @@ class Dbhelper {
     return id;
   }
 
+  Future<int> deleteItem(ListItems item) async {
+    int result =
+        await db!.delete('items', where: 'id = ?', whereArgs: [item.id]);
+
+    return result;
+  }
+
   Future<List<ShoppingList>> getLists() async {
     List maps = await db!.query('lists');
 
