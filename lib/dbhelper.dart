@@ -64,6 +64,15 @@ class Dbhelper {
     return id;
   }
 
+  Future<int> deleteList(ShoppingList list) async {
+    int result =
+        await db!.delete('items', where: 'idList = ?', whereArgs: [list.id]);
+
+    result = await db!.delete('lists', where: 'id = ?', whereArgs: [list.id]);
+
+    return result;
+  }
+
   Future<int> insertItem(ListItems item) async {
     // the conflictAlgorithm specifies the behavior that should
     // be followed when you try to insert a record with the same ID twice. In
@@ -94,17 +103,5 @@ class Dbhelper {
         maps.length,
         (index) => ListItems(maps[index]['id'], maps[index]['idList'],
             maps[index]['name'], maps[index]['note'], maps[index]['quantity']));
-  }
-
-  // For testing purposes we inserted 2 lines in both lists and items tables
-  Future<void> testDb() async {
-    db = await openDb();
-    await db!.execute('INSERT INTO lists VALUES (0, "Fruit", 2)');
-    await db!.execute(
-        'INSERT INTO items VALUES (0, 0, "Apples", "2 Kg", "Better if they are green")');
-    List lists = await db!.rawQuery('select * from lists');
-    List items = await db!.rawQuery('select * from items');
-    print(lists[0].toString());
-    print(items[0].toString());
   }
 }

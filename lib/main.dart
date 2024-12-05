@@ -63,27 +63,41 @@ class _ShopListState extends State<ShopList> {
         body: ListView.builder(
           itemCount: shoppingList.length,
           itemBuilder: (context, position) {
-            return ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ItemsScreen(shoppingList[position])));
-              },
-              trailing: IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => dialog.buildDialog(
-                            context, shoppingList[position], false));
+            return Dismissible(
+                key: Key(shoppingList[position].id.toString()),
+                onDismissed: (direction) {
+                  String listName = shoppingList[position].name;
+                  helper.deleteList(shoppingList[position]);
+
+                  setState(() {
+                    shoppingList.removeAt(position);
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('$listName deleted')));
+                },
+                child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ItemsScreen(shoppingList[position])));
                   },
-                  icon: const Icon(Icons.edit)),
-              leading: CircleAvatar(
-                child: Text(shoppingList[position].priority.toString()),
-              ),
-              title: Text(shoppingList[position].name),
-            );
+                  trailing: IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                dialog.buildDialog(
+                                    context, shoppingList[position], false));
+                      },
+                      icon: const Icon(Icons.edit)),
+                  leading: CircleAvatar(
+                    child: Text(shoppingList[position].priority.toString()),
+                  ),
+                  title: Text(shoppingList[position].name),
+                ));
           },
         ));
   }
