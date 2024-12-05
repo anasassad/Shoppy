@@ -33,7 +33,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
           title: Text(shoppingList.name),
         ),
         body: ListView.builder(
-          padding: const EdgeInsets.all(16),
           itemCount: items.length,
           itemBuilder: (context, position) {
             return ListTile(
