@@ -13,7 +13,21 @@ class Shoppy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: ShopList());
+    return MaterialApp(
+        theme: ThemeData(
+          inputDecorationTheme: const InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.white70,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12))),
+            contentPadding: EdgeInsets.all(10),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: Colors.blueGrey, width: 1.5),
+            ),
+          ),
+        ),
+        home: const ShopList());
   }
 }
 
